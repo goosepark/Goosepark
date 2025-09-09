@@ -11,7 +11,7 @@ contract MusicMarketplace is Ownable, ReentrancyGuard {
         address nftContract;
         uint256 tokenId;
         address seller;
-        uint256 price;
+        uint256 price; // Price in ETH
         bool isActive;
     }
     
@@ -82,7 +82,7 @@ contract MusicMarketplace is Ownable, ReentrancyGuard {
         Listing storage listing = listings[listingId];
         
         require(listing.isActive, "Listing not active");
-        require(msg.value >= listing.price, "Insufficient payment");
+        require(msg.value >= listing.price, "Insufficient ETH payment");
         require(listing.seller != msg.sender, "Cannot buy your own NFT");
         
         // Calculate platform fee
@@ -92,7 +92,7 @@ contract MusicMarketplace is Ownable, ReentrancyGuard {
         // Transfer NFT
         IERC721(_nftContract).safeTransferFrom(listing.seller, msg.sender, _tokenId);
         
-        // Distribute payments
+        // Distribute ETH payments
         if (platformFeeAmount > 0) {
             payable(platformWallet).transfer(platformFeeAmount);
         }

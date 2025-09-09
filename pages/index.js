@@ -4,6 +4,26 @@ import { useAccount, useConnect, useDisconnect } from 'wagmi'
 import { Play, Pause, Music, Wallet, ExternalLink, Heart, Share2, ArrowRight, Disc3 } from 'lucide-react'
 import toast from 'react-hot-toast'
 
+// Supported wallets and currencies
+const supportedWallets = [
+  { 
+    name: "MetaMask", 
+    symbol: "ETH", 
+    currency: "Ethereum", 
+    icon: "🦊", 
+    color: "orange",
+    description: "Ethereum blockchain"
+  },
+  { 
+    name: "Phantom", 
+    symbol: "SOL", 
+    currency: "Solana", 
+    icon: "👻", 
+    color: "purple",
+    description: "Solana blockchain"
+  }
+]
+
 // Your music NFT collections - replace with your actual collection data
 const musicCollections = [
   {
@@ -12,10 +32,14 @@ const musicCollections = [
     description: "An ethereal journey through digital landscapes and electronic soundscapes",
     cover: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop",
     openseaUrl: "https://opensea.io/collection/your-digital-dreams-collection",
-    contractAddress: "0x...", // Your contract address
+    magicEdenUrl: "https://magiceden.io/collections/your-digital-dreams-collection", // Solana marketplace
+    contractAddress: "0x...", // Your Ethereum contract address
+    solanaAddress: "...", // Your Solana collection address
     totalSupply: 100,
-    floorPrice: "0.05",
-    currency: "ETH",
+    prices: {
+      ETH: "0.05",
+      SOL: "0.15"
+    },
     genre: "Electronic",
     year: "2024",
     featured: true
@@ -26,10 +50,14 @@ const musicCollections = [
     description: "Synthetic beats and retro-futuristic vibes for the urban explorer",
     cover: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=400&h=400&fit=crop",
     openseaUrl: "https://opensea.io/collection/your-neon-nights-series",
-    contractAddress: "0x...", // Your contract address
+    magicEdenUrl: "https://magiceden.io/collections/your-neon-nights-series",
+    contractAddress: "0x...", // Your Ethereum contract address
+    solanaAddress: "...", // Your Solana collection address
     totalSupply: 50,
-    floorPrice: "0.08",
-    currency: "ETH",
+    prices: {
+      ETH: "0.08",
+      SOL: "0.25"
+    },
     genre: "Synthwave",
     year: "2024",
     featured: true
@@ -40,10 +68,14 @@ const musicCollections = [
     description: "Ambient soundscapes from the depths of space and beyond",
     cover: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop",
     openseaUrl: "https://opensea.io/collection/your-cosmic-waves",
-    contractAddress: "0x...", // Your contract address
+    magicEdenUrl: "https://magiceden.io/collections/your-cosmic-waves",
+    contractAddress: "0x...", // Your Ethereum contract address
+    solanaAddress: "...", // Your Solana collection address
     totalSupply: 25,
-    floorPrice: "0.12",
-    currency: "ETH",
+    prices: {
+      ETH: "0.12",
+      SOL: "0.35"
+    },
     genre: "Ambient",
     year: "2024",
     featured: false
@@ -54,10 +86,14 @@ const musicCollections = [
     description: "Raw, experimental sounds from the underground music scene",
     cover: "https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=400&h=400&fit=crop",
     openseaUrl: "https://opensea.io/collection/your-underground-beats",
-    contractAddress: "0x...", // Your contract address
+    magicEdenUrl: "https://magiceden.io/collections/your-underground-beats",
+    contractAddress: "0x...", // Your Ethereum contract address
+    solanaAddress: "...", // Your Solana collection address
     totalSupply: 75,
-    floorPrice: "0.03",
-    currency: "ETH",
+    prices: {
+      ETH: "0.03",
+      SOL: "0.10"
+    },
     genre: "Experimental",
     year: "2024",
     featured: false
@@ -69,18 +105,38 @@ export default function Home() {
   const { connect, connectors } = useConnect()
   const { disconnect } = useDisconnect()
   const [selectedCollection, setSelectedCollection] = useState(null)
+  const [selectedWallet, setSelectedWallet] = useState("ETH")
 
   const openCollection = (collection) => {
-    window.open(collection.openseaUrl, '_blank')
+    if (selectedWallet === "ETH") {
+      window.open(collection.openseaUrl, '_blank')
+    } else {
+      window.open(collection.magicEdenUrl, '_blank')
+    }
   }
 
-  const copyContractAddress = (address) => {
+  const copyContractAddress = (collection) => {
+    const address = selectedWallet === "ETH" ? collection.contractAddress : collection.solanaAddress
     navigator.clipboard.writeText(address)
-    toast.success('Contract address copied to clipboard!')
+    toast.success(`${selectedWallet === "ETH" ? "Ethereum" : "Solana"} address copied to clipboard!`)
   }
 
   const formatPrice = (price, currency) => {
     return `${price} ${currency}`
+  }
+
+  const getCurrentPrice = (collection) => {
+    return collection.prices[selectedWallet] || collection.prices.ETH
+  }
+
+  const getWalletIcon = (symbol) => {
+    const wallet = supportedWallets.find(w => w.symbol === symbol)
+    return wallet ? wallet.icon : "💰"
+  }
+
+  const getWalletColor = (symbol) => {
+    const wallet = supportedWallets.find(w => w.symbol === symbol)
+    return wallet ? wallet.color : "gray"
   }
 
   const featuredCollections = musicCollections.filter(collection => collection.featured)
@@ -140,8 +196,33 @@ export default function Home() {
             </h2>
             <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
               Explore my exclusive music NFT collections. Each piece is a unique digital 
-              artwork paired with original music, available on the blockchain.
+              artwork paired with original music, available on both Ethereum and Solana blockchains.
             </p>
+            
+            {/* Wallet Selector */}
+            <div className="mb-8">
+              <p className="text-lg text-gray-300 mb-4">Choose your preferred blockchain:</p>
+              <div className="flex flex-wrap justify-center gap-4">
+                {supportedWallets.map((wallet) => (
+                  <button
+                    key={wallet.symbol}
+                    onClick={() => setSelectedWallet(wallet.symbol)}
+                    className={`flex items-center space-x-3 px-6 py-4 rounded-xl transition-all duration-300 ${
+                      selectedWallet === wallet.symbol
+                        ? `bg-${wallet.color}-600 text-white shadow-lg scale-105`
+                        : 'bg-gray-700 text-gray-300 hover:bg-gray-600 hover:scale-102'
+                    }`}
+                  >
+                    <span className="text-2xl">{wallet.icon}</span>
+                    <div className="text-left">
+                      <div className="font-semibold">{wallet.name}</div>
+                      <div className="text-sm opacity-80">{wallet.description}</div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+            
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button 
                 onClick={() => document.getElementById('collections').scrollIntoView({ behavior: 'smooth' })}
@@ -194,14 +275,14 @@ export default function Home() {
                     
                     <div className="flex items-center justify-between pt-4">
                       <div className="text-2xl font-bold text-purple-400">
-                        Floor: {formatPrice(collection.floorPrice, collection.currency)}
+                        <span className="text-lg text-gray-400">Floor:</span> {getWalletIcon(selectedWallet)} {getCurrentPrice(collection)} {selectedWallet}
                       </div>
                       
                       <button
                         onClick={() => openCollection(collection)}
                         className="flex items-center space-x-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
                       >
-                        <span>View on OpenSea</span>
+                        <span>View on {selectedWallet === "ETH" ? "OpenSea" : "Magic Eden"}</span>
                         <ExternalLink className="h-4 w-4" />
                       </button>
                     </div>
@@ -249,15 +330,15 @@ export default function Home() {
                     
                     <div className="flex items-center justify-between pt-4">
                       <div className="text-lg font-bold text-purple-400">
-                        {formatPrice(collection.floorPrice, collection.currency)}
+                        {getWalletIcon(selectedWallet)} {getCurrentPrice(collection)} {selectedWallet}
                       </div>
                       
                       <div className="flex space-x-2">
                         <button
-                          onClick={() => copyContractAddress(collection.contractAddress)}
+                          onClick={() => copyContractAddress(collection)}
                           className="px-3 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm transition-colors"
                         >
-                          Copy Contract
+                          Copy {selectedWallet === "ETH" ? "Contract" : "Address"}
                         </button>
                         <button
                           onClick={() => openCollection(collection)}
