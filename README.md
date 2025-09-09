@@ -1,15 +1,15 @@
-# 🎵 Goosepark Music - Blockchain Music Marketplace
+# 🎵 Goosepark Music - NFT Collection Showcase
 
-A decentralized music marketplace built on Ethereum that allows artists to showcase and sell their music directly to fans using cryptocurrency. Built with Next.js, Solidity, and Web3 technologies.
+A clean, simple platform to showcase your existing music NFT collections on both Ethereum and Solana blockchains. Built with Next.js and Web3 technologies.
 
 ## ✨ Features
 
-- 🎵 **Music Showcase**: Beautiful, responsive interface to display your music
-- 💰 **Blockchain Payments**: Purchase music with ETH using MetaMask, WalletConnect, or Coinbase Wallet
-- 🎧 **Built-in Player**: Stream music directly in the browser
-- 🏆 **NFT Ownership**: Each track is minted as an NFT for true ownership
-- 💎 **Royalty System**: Automatic royalty distribution to artists
-- 🔒 **Decentralized**: No middleman, direct artist-to-fan transactions
+- 🎵 **Collection Showcase**: Beautiful, responsive interface to display your music NFT collections
+- 💰 **Multi-Blockchain Support**: Purchase with ETH (MetaMask) or SOL (Phantom)
+- 🔗 **Easy Navigation**: Direct links to OpenSea and Magic Eden marketplaces
+- 🏆 **Existing NFTs**: Showcase your already minted music NFT collections
+- 💎 **Simple Pricing**: Clear ETH/SOL pricing for each collection
+- 🔒 **Wallet Integration**: MetaMask and Phantom wallet support
 - 📱 **Mobile Responsive**: Works perfectly on all devices
 
 ## 🚀 Quick Start
@@ -80,33 +80,38 @@ A decentralized music marketplace built on Ethereum that allows artists to showc
 ### Frontend Development
 
 The frontend is built with Next.js and includes:
-- Web3 wallet integration (MetaMask, WalletConnect, Coinbase)
-- Responsive music player
+- Web3 wallet integration (MetaMask, Phantom)
+- Collection showcase with pricing
 - Modern UI with Tailwind CSS
-- Real-time blockchain interactions
+- Direct marketplace integration
 
-## 🎵 Adding Your Music
+## 🎵 Adding Your Collections
 
-1. **Upload to IPFS**: Store your music files on IPFS for decentralization
-2. **Update music data**: Edit the `musicData` array in `pages/index.js`
-3. **Deploy smart contract**: Deploy the MusicMarketplace contract
-4. **Mint tracks**: Use the contract to mint your tracks as NFTs
+1. **Update collection data**: Edit the `musicCollections` array in `pages/index.js`
+2. **Add your contract addresses**: Update Ethereum and Solana addresses
+3. **Set pricing**: Add ETH and SOL prices for each collection
+4. **Update marketplace links**: Add your OpenSea and Magic Eden URLs
 
-### Music Data Structure
+### Collection Data Structure
 
 ```javascript
 {
   id: 1,
-  title: "Your Track Title",
-  artist: "Your Artist Name",
-  duration: "3:45",
-  price: "0.05", // Price in ETH
-  currency: "ETH",
+  name: "Your Collection Name",
+  description: "Your collection description",
   cover: "https://your-cover-image-url.com",
-  audio: "/music/your-track.mp3", // or IPFS URL
-  description: "Track description",
+  openseaUrl: "https://opensea.io/collection/your-collection",
+  magicEdenUrl: "https://magiceden.io/collections/your-collection",
+  contractAddress: "0x...", // Your Ethereum contract address
+  solanaAddress: "...", // Your Solana collection address
+  totalSupply: 100,
+  prices: {
+    ETH: "0.05",
+    SOL: "0.15"
+  },
   genre: "Electronic",
-  year: "2024"
+  year: "2024",
+  featured: true
 }
 ```
 
@@ -114,18 +119,18 @@ The frontend is built with Next.js and includes:
 
 ### MusicMarketplace Contract
 
-- **Track Creation**: Mint music as NFTs with metadata
-- **Purchase System**: Buy tracks with ETH
-- **Royalty Distribution**: Automatic royalty payments to creators
+- **NFT Listing**: List existing NFTs for sale
+- **Purchase System**: Buy NFTs with ETH
 - **Platform Fees**: Configurable platform fees
 - **Ownership Transfer**: Transfer NFT ownership after purchase
+- **Multi-Token Support**: Support for any ERC721 NFT
 
 ### Key Functions
 
-- `createTrack()`: Mint a new music NFT
-- `purchaseTrack()`: Buy a track with ETH
-- `updateTrackPrice()`: Change track price
-- `toggleTrackSale()`: Enable/disable track sales
+- `listNFT()`: List an existing NFT for sale
+- `purchaseNFT()`: Buy an NFT with ETH
+- `updateListingPrice()`: Change listing price
+- `cancelListing()`: Remove NFT from sale
 
 ## 🌐 Deployment
 
@@ -149,10 +154,8 @@ The frontend is built with Next.js and includes:
 
 ## 📱 Supported Wallets
 
-- MetaMask
-- WalletConnect
-- Coinbase Wallet
-- Any WalletConnect-compatible wallet
+- **MetaMask** - Ethereum blockchain
+- **Phantom** - Solana blockchain
 
 ## 🎨 Customization
 
@@ -161,10 +164,10 @@ The frontend is built with Next.js and includes:
 - Modify `styles/globals.css` for global styles
 - Update colors, fonts, and animations
 
-### Music Player
-- Customize player controls in `pages/index.js`
-- Add more audio formats support
-- Implement playlist functionality
+### Collection Display
+- Customize collection cards in `pages/index.js`
+- Add more collection metadata
+- Implement filtering and sorting
 
 ### Smart Contract
 - Adjust royalty percentages
@@ -198,14 +201,14 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 ## 🎯 Roadmap
 
-- [ ] Playlist creation and sharing
+- [ ] Collection filtering and search
 - [ ] Social features (likes, comments, follows)
-- [ ] Advanced audio analytics
+- [ ] Advanced collection analytics
 - [ ] Mobile app (React Native)
 - [ ] Multi-chain support (Polygon, BSC)
-- [ ] Streaming subscriptions
+- [ ] Collection rarity rankings
 - [ ] Artist dashboard
-- [ ] Music discovery algorithms
+- [ ] Collection discovery algorithms
 
 ---
 

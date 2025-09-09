@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import { useAccount, useConnect, useDisconnect } from 'wagmi'
-import { Play, Pause, Music, Wallet, ExternalLink, Heart, Share2, ArrowRight, Disc3 } from 'lucide-react'
+import { Music, Wallet, ExternalLink, Heart, Share2, ArrowRight, Disc3 } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 // Supported wallets and currencies
