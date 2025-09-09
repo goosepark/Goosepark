@@ -196,7 +196,7 @@ MIT License - see [LICENSE](LICENSE) file for details
 ## 📞 Support
 
 - Create an issue on GitHub
-- Contact: [your-email@example.com](mailto:your-email@example.com)
+- Contact: [support@goosepark.org](mailto:support@goosepark.org)
 - Twitter: [@goosepark](https://twitter.com/goosepark)
 
 ## 🎯 Roadmap
